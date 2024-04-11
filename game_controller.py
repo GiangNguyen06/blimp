@@ -87,37 +87,37 @@ def run():
                     
                     elif event.button == 3:
                             print("Going backward!")
-                            message = {"direction" : 1200}
+                            message = {"direction" : 40}
                             publish(client, message)
                             
                     elif event.button == 0:
                             print("Going forward!")
-                            message = {"direction" : 1900}
+                            message = {"direction" : 90}
                             publish(client, message)
                             
                     elif event.button == 1:
                             print("Going up!")
-                            message = {"direction" : 800}
+                            message = {"direction" : 70}
                             publish(client, message)
                             
                     elif event.button == 2:
                             print("Going down!")
-                            message = {"direction" : 1600}
+                            message = {"direction" : 20}
                             publish(client, message)
                             
                     elif event.button == 11:
-                            new_angle = current_angle + 250 
-                            if new_angle > 2000:
-                                    new_angle -= 2000
+                            new_angle = current_angle + 10
+                            if new_angle > 360:
+                                    new_angle -= 20
                             print(f"Up {new_angle} value: {new_angle:>6.3f}")
                             message = {"absolute_angle": new_angle}
                             publish(client, message)
                             current_angle = new_angle
                             
                     elif event.button == 12:
-                            new_angle = current_angle - 250
+                            new_angle = current_angle - 10
                             if new_angle < 0:
-                                    new_angle += 2000
+                                    new_angle += 20
                             print(f"Down {new_angle} value: {new_angle:>6.3f}")
                             message = {"absolute_angle": new_angle}
                             publish(client, message)  
