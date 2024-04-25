@@ -3,7 +3,6 @@ from cv2 import aruco
 import numpy as np
 import urllib.request
 
-url = "http://192.168.2.191/capture?"
 
 # load in the calibration data
 calib_data_path = "MultiMatrix.npz"
@@ -26,7 +25,7 @@ url = "http://192.168.2.191/capture?"
 
 while True:
 
-    
+
     img_response = urllib.request.urlopen(url)
     img_array = np.array(bytearray(img_response.read()), dtype=np.uint8)
     
