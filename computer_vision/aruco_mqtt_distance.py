@@ -1,11 +1,11 @@
-import cv2 as cv
-
-import numpy as np
-import cv2.aruco as aruco
-from paho.mqtt import client as mqtt_client
 import random
 import json
 import time
+import cv2 as cv
+import numpy as np
+import cv2.aruco as aruco
+from paho.mqtt import client as mqtt_client
+
 
 broker = 'localhost'
 port = 1883
@@ -23,7 +23,7 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
-MARKER_SIZE = 1.2  # centimeters (measure your printed marker size)
+MARKER_SIZE = 2.7  # centimeters (measure your printed marker size)
 
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_5X5_250)
 
