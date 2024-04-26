@@ -1,6 +1,6 @@
+import glob
 import cv2 as cv
 import numpy as np
-import glob
 
 chessboard_width = 8
 chessboard_height = 5
