@@ -1,5 +1,5 @@
-import cv2 as cv
 import os
+import cv2 as cv
 
 
 URL = "http://192.168.2.191:81/stream"
