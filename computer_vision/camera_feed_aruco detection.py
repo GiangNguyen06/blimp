@@ -1,30 +1,29 @@
-import cv2
-import urllib.request
+import cv2 as cv
 import numpy as np
-import cv2.aruco as aruco
 
+URL = "http://192.168.2.191:81/stream"
 
-url = "http://192.168.2.191/capture?"
-feed = cv2.VideoCapture(url)
+cap = cv.VideoCapture(URL)
 
-aruco_dict = aruco.Dictionary_get(aruco.DICT_5X5_50)
+aruco_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_5X5_50)
 
 while True:
-    img_response = urllib.request.urlopen(url)
-    imgnp = np.array(bytearray(img_response.read()), dtype = np.uint8) 
+    if cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            print("Error reading frame from the stream")
+            break
     
-    frame = cv2.imdecode (imgnp, -1)
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-    corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict)
+    corners, ids, rejectedImgPoints = cv.aruco.detectMarkers(gray, aruco_dict)
     
     if ids is not None:
-        aruco.drawDetectedMarkers(frame, corners, ids)
+        cv.aruco.drawDetectedMarkers(frame, corners, ids)
     
-    cv2.imshow("Live Cam test", frame)
-    key = cv2.waitKey(5)
+    cv.imshow("Live Cam test", frame)
+    key = cv.waitKey(1)
     if key == ord("q"):
         break
     
-cv2.destroyAllWindows()
+cv.destroyAllWindows()
