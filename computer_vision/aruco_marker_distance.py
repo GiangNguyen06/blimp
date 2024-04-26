@@ -1,7 +1,6 @@
 import cv2 as cv
 from cv2 import aruco
 import numpy as np
-import urllib.request
 
 
 # load in the calibration data
