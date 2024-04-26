@@ -20,17 +20,18 @@ MARKER_SIZE = 1.2  # centimeters (measure your printed marker size)
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_5X5_250)
 
 param_markers = aruco.DetectorParameters()
-url = "http://192.168.2.191/capture?"
+URL = "http://192.168.2.191:81/stream"
+
+cap = cv.VideoCapture(URL)
 
 
 while True:
 
 
-    img_response = urllib.request.urlopen(url)
-    img_array = np.array(bytearray(img_response.read()), dtype=np.uint8)
-    
-    # Decode image array into OpenCV image format
-    frame = cv.imdecode(img_array, -1)
+    if cap.isOpened():
+        ret, frame = cap.read()
+        gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+        marker_corners, marker_IDs, _ = aruco.detectMarkers(gray_frame, marker_dict)
     
     if frame is not None:
         gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
