@@ -1,7 +1,8 @@
-from paho.mqtt import client as mqtt_client
+import json
 import pygame
 import random
-import json
+from paho.mqtt import client as mqtt_client
+
 
 broker = 'localhost'
 port = 1883
