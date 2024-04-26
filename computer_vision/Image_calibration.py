@@ -46,7 +46,7 @@ for fname in images:
     
   
 cv.destroyAllWindows()
-print("Drawing done! Waiting for the results")
+print("Drawing done! Waiting for the results!")
 
 ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 
