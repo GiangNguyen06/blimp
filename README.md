@@ -10,3 +10,5 @@ Arduino code is essential to the movements of a whole blimp.
 Updated with AruCo MQTT recogniition.
 
 The scripts are able to calibrate the camera, and with this properly measure the distance(10% error) and ID the Aruco marker.
+
+Note: make sure that not the newest OpenCV library is installed. Some functions changed from version 4.7.0. It is advised to use older versions.
