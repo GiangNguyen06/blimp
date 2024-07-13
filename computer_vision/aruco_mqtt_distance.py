@@ -9,7 +9,6 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'localhost'
 port = 1883
-topic = "aruco"
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
 
 # load in the calibration data
@@ -28,6 +27,8 @@ MARKER_SIZE = 2.7  # centimeters (measure your printed marker size)
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_5X5_250)
 
 param_markers = aruco.DetectorParameters()
+
+
 
 URL = "http://192.168.2.191:81/stream"
 
@@ -55,7 +56,7 @@ def ensure_mqtt_client(client):
     return client
 
 
-def publish(client, message):
+def publish(client, topic ,message):
     msg = json.dumps(message)
     result = client.publish(topic, msg)
     status = result[0]
@@ -99,6 +100,7 @@ def run():
                     distance = np.sqrt(
                         tVec[i][0][2] ** 2 + tVec[i][0][0] ** 2 + tVec[i][0][1] ** 2
                     )
+                    distance = round(distance)
                     # Draw the pose of the marker
                     point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
                     cv.putText(
@@ -113,7 +115,7 @@ def run():
                     )
                     cv.putText(
                         frame,
-                        f"x:{round(tVec[i][0][0],1)} y: {round(tVec[i][0][1],1)} ",
+                        f"x:{round(tVec[i][0][0],1)} y: {round(tVec[i][0][1],1)} z: {round(tVec[i][0][2],1)}",
                         bottom_right,
                         cv.FONT_HERSHEY_PLAIN,
                         1.0,
@@ -123,17 +125,27 @@ def run():
                     )
                     
                     print(f"Detected ArUco marker with ID: {ids[0]} and the distance is {distance}!")
-                
-                for marker_id in marker_IDs:
-                   message = {}
-                   if marker_id == 0:
-                       message["direction"] = "go up"
-                   elif marker_id == 1:
-                       message["direction"] = "go down"
-                   else:
-                       message["direction"] = "unknown direction"
-                 
-                   publish(client, message)
+                    
+                    message = {"x": round(tVec[i][0][0], 1)} #turning on x axis
+                    publish(client, "turn" ,message)
+                    
+                    message = {"y": round(tVec[i][0][2], 1)} #yawn on y axis 
+                    publish(client, "servo", message)
+                # Publish servo commands to "aruco" topic
+                    message = {}
+                    if ids[0] == 2:
+                        message[f"ArUco marker {ids[0]}, distance is {distance}"] = "go up"
+                    elif ids[0] == 7:
+                        message[f"ArUco marker {ids[0]}, command"] = "go down"
+                    elif ids[0] == 20:
+                        message["unknown"] = "unknown direction"
+                    else:
+                        message["unknown"] = "unknown direction"
+                    publish(client, "aruco", message)
+
+                   # Publish distance to "engine" topic
+                    distance_message = {"distance": distance}
+                    publish(client, "auto", distance_message)
                    
         cv.putText(frame, f"FPS: {frame_count / (time.time() - start_time):.2f}", (10, 30), cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2, cv.LINE_AA)
       
