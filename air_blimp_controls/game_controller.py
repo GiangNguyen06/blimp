@@ -1,12 +1,18 @@
-import json
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jul 12 11:28:38 2024
+
+@author: zangt
+"""
+
+from paho.mqtt import client as mqtt_client
 import pygame
 import random
-from paho.mqtt import client as mqtt_client
-
+import json
 
 broker = 'localhost'
 port = 1883
-topic = "servo"
+topic = "manual"
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
 
 
